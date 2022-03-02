@@ -44,15 +44,17 @@ void Layers::dry_partially(float percent)
 				
 			this->wetLayer->set_density(i,j, array_cpy[IX2(i,j)] * (1 - percent));
 
-			if (i == 10 && j == 10)
+			if (i == 30 && j == 30)
 			{
 				std::cout << "new wet value is " << new_wet; //this->wetLayer->getDensity(i, j);
 				std::cout << "dry value is " << this->dryLayer->getDensity(i, j);
 			}
 			
-			//add percentage density to dry layer
-			this->dryLayer->addDensity(i, j, array_cpy[IX2(i,j)] * percent);
-			if (i == 10 && j == 10)
+			//add percentage density to dry layer and freeze velocities
+			//this->dryLayer->array_init(dryLayer->getVxArray(), this->size);
+			//this->dryLayer->array_init(dryLayer->getVyArray(), this->size);
+			dryLayer->array_init(this->wetLayer->getDensityArray(), this->size);
+			if (i == 30 && j == 30)
 			{
 				std::cout << "new dry value is " << this->dryLayer->getDensity(i, j);
 			}

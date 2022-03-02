@@ -8,6 +8,7 @@
 #include "fluid.h"
 #include "fluid_utils.h"
 #include "Layers.h"
+#include "User.h"
 
 
 //Fluid* fluid;
@@ -67,9 +68,12 @@ unsigned int indices[] = {
 
 uint8_t* background;
 uint8_t* brush;
+User* user;
 double x, y;
 
 int main(int argc, char** argv) {
+
+	user= new User();
 
 	//FLUID DECLARATION
 	//fluid = new Fluid(0.2, 0, 0.0000001);
@@ -77,7 +81,7 @@ int main(int argc, char** argv) {
 	//LAYERS DECLARATION
 	layers = new Layers(0.2, 0, 0.0000001);
 	
-
+	
 
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -285,15 +289,21 @@ void processInput(GLFWwindow* window) {
 
 		float amtX = (float)x - previousX;
 		float amtY = (float)y - previousY;
-		layers->wetLayer->addVelocity(x / SCALE, y / SCALE, amtX, amtY);
 
+		float pressure_coef = 1.0 - (user->pressure);
+		if (user->pressure > 1.0)
+			std::cout << "PRESSURE VALUE MUST BE LESS THAN 1" << std::endl; 
+		layers->wetLayer->addVelocity((x / SCALE) * pressure_coef, (y/ SCALE) * pressure_coef, amtX, amtY);
+
+
+		
 
 	}
 
 	if (x < 25 && y < 25 && x > 1 && y > 1)
 	{
-		std::cout << "DRYYY PARTIALLY" << std::endl;
-		layers->dry_partially(0.25);
+		//std::cout << "DRYYY PARTIALLY" << std::endl;
+		//layers->dry_partially(0.25);
 	}
 }
 
